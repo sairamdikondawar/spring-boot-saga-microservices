@@ -17,11 +17,28 @@
 	<properties>
 		<java.version>11</java.version>
 	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>org.axonframework</groupId>
+			<artifactId>axon-spring-boot-starter</artifactId>
+			<version>4.5.14</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>31.1-jre</version>
+		</dependency>
+
+
+
+	</dependencies>
 <modules>
-	<module>shared</module>
+	<module>commonservice</module>
 	<module>orderservice</module>
 	<module>paymentservice</module>
 	<module>notificationservice</module>
 	<module>shippmentservice</module>
+	<module>productservice</module>
+	<module>userservice</module>
 </modules>
 </project>
