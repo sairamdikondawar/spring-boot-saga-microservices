@@ -4,6 +4,7 @@ import com.javatech.orderservice.command.api.command.CreateOrderCommand;
 import com.javatech.orderservice.command.api.model.OrderRestModel;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,13 +16,12 @@ public class OrderCommandController {
 
     private final CommandGateway commandGateway;
 
-    public OrderCommandController(CommandGateway commandGateway)
-    {
-        this.commandGateway=commandGateway;
+    public OrderCommandController(CommandGateway commandGateway) {
+        this.commandGateway = commandGateway;
     }
 
     @PostMapping
-    public String createOrder(OrderRestModel orderRestModel) {
+    public String createOrder(@RequestBody OrderRestModel orderRestModel) {
         String orderId = UUID.randomUUID().toString();
         CreateOrderCommand createOrderCommand = CreateOrderCommand.builder()
                 .orderId(orderId)
