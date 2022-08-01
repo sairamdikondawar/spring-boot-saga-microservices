@@ -7,10 +7,10 @@ import org.springframework.context.annotation.Import;
 
 @SpringBootApplication
 @Import({ AxonConfig.class })
-public class ShippmentserviceApplication {
+public class ShipmentServiceApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ShippmentserviceApplication.class, args);
+		SpringApplication.run(ShipmentServiceApplication.class, args);
 	}
 
 }

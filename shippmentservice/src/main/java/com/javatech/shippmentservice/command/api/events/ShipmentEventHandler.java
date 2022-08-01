@@ -1,6 +1,7 @@
 package com.javatech.shippmentservice.command.api.events;
 
 import com.javatech.commonservice.events.OrderShippedEvent;
+import com.javatech.commonservice.events.ShipmentCancelledEvent;
 import com.javatech.shippmentservice.command.api.data.Shipment;
 import com.javatech.shippmentservice.command.api.data.ShipmentRepository;
 import org.axonframework.eventhandling.EventHandler;
@@ -24,6 +25,14 @@ public class ShipmentEventHandler {
                 .orderId(event.getOrderId())
                 .shipmentStatus(event.getShipmentStatus())
                 .build();
+        shipmentRepository.save(shipment);
+    }
+
+    @EventHandler
+    public void on(ShipmentCancelledEvent event) {
+        Shipment shipment
+                =shipmentRepository.findById(event.getShipmentId()).get();
+        shipment.setShipmentStatus(event.getShipmentStatus());
         shipmentRepository.save(shipment);
     }
 }

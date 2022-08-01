@@ -1,6 +1,8 @@
 package com.javatech.paymentservice.command.api.aggregate;
 
+import com.javatech.commonservice.commands.CancelPaymentCommand;
 import com.javatech.commonservice.commands.ValidatePaymentCommand;
+import com.javatech.commonservice.events.PaymentCancelledEvent;
 import com.javatech.commonservice.events.PaymentProcessedEvent;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -9,6 +11,7 @@ import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.modelling.command.AggregateIdentifier;
 import org.axonframework.modelling.command.AggregateLifecycle;
 import org.axonframework.spring.stereotype.Aggregate;
+import org.springframework.beans.BeanUtils;
 
 @Data
 //@Builder
@@ -22,9 +25,7 @@ public class PaymentAggregate {
     private String paymentStatus;
 
     public PaymentAggregate() {
-
     }
-
 
     @CommandHandler
     public PaymentAggregate(ValidatePaymentCommand validatePaymentCommand) {
@@ -39,9 +40,31 @@ public class PaymentAggregate {
     }
 
     @EventSourcingHandler
-    public void on(PaymentProcessedEvent paymentProcessedEvent) {
-          this.paymentId= paymentProcessedEvent.getPaymentId();;
-          this.orderId=paymentProcessedEvent.getOrderId();
+    public void on(PaymentProcessedEvent event) {
+        this.paymentId = event.getPaymentId();
+        this.orderId = event.getOrderId();
+    }
+
+    @CommandHandler
+    public void handle(CancelPaymentCommand command) {
+        //Validate the payment details;
+
+        // Publish the payment details
+        log.info("CancelPaymentCommand Order Id : {} , Payment Id : {} ", command.getOrderId(), command.getPaymentId());
+
+        PaymentCancelledEvent paymentCancelledEvent = new PaymentCancelledEvent();
+
+        BeanUtils.copyProperties(command,paymentCancelledEvent);
+
+        AggregateLifecycle.apply(paymentCancelledEvent);
+        log.info("CancelPaymentCommand applied");
+    }
+
+    @EventSourcingHandler
+    public void on(PaymentCancelledEvent event) {
+//        this.paymentId = event.getPaymentId();
+//        this.orderId = event.getOrderId();
+        this.paymentStatus = event.getPaymentStatus();
     }
 
 
